@@ -4,10 +4,17 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('./models/User'); // Create this model
-const Post = require('./models/Post'); // Create this model
+const cors = require('cors');
 
 const app = express();
 
+const corsOptions = {
+    origin: 'http://localhost:3000', // Replace with your frontend URL
+    methods: 'GET,POST,PUT,DELETE',
+    credentials: true,
+};
+
+app.use(cors(corsOptions)); // Add CORS support
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 

@@ -6,6 +6,7 @@ const passport = require('passport');
 
 // Register
 router.post('/register', (req, res) => {
+    console.log("register")
     User.register(new User({ username: req.body.username }), req.body.password, (err, user) => {
         if (err) {
             return res.status(500).json(err);
@@ -18,6 +19,7 @@ router.post('/register', (req, res) => {
 
 // Login
 router.post('/login', passport.authenticate('local'), (req, res) => {
+    console.log("LOGIN")
     res.status(200).json(req.user);
 });
 
