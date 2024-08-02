@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchPosts, addPost, deletePost } from './actions/postsActions';
-import PostList from './PostList';
-import PostForm from './PostForm';
+import PostList from './components/postList';
+import PostForm from './components/postForm';
 
 class App extends Component {
   componentDidMount() {
