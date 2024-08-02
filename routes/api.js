@@ -6,16 +6,16 @@ const passport = require('passport');
 
 // Register
 router.post('/register', (req, res) => {
-    console.log("register")
     User.register(new User({ username: req.body.username }), req.body.password, (err, user) => {
         if (err) {
-            return res.status(500).json(err);
+            return res.status(500).json({ message: err.message });
         }
         passport.authenticate('local')(req, res, () => {
-            res.status(200).json(user);
+            res.status(200).json({ message: 'Registration successful', user });
         });
     });
 });
+
 
 // Login
 router.post('/login', passport.authenticate('local'), (req, res) => {
@@ -24,14 +24,26 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
 });
 
 // Logout
-router.get('/logout', (req, res) => {
-    req.logout();
-    res.status(200).json({ message: 'Logged out' });
-});
 
+
+router.get('/logout', (req, res) => {
+    req.logout((err) => {
+        if (err) {
+            return res.status(500).json({ message: 'Error logging out', error: err });
+        }
+        // Successfully logged out
+        req.session.destroy((err) => {
+            if (err) {
+                return res.status(500).json({ message: 'Error destroying session', error: err });
+            }
+            res.status(200).json({ message: 'Logged out successfully' });
+        });
+    });
+});
 
 // Middleware to ensure user is authenticated
 const isAuthenticated = (req, res, next) => {
+    console.log("REQ", req.user)
     if (req.isAuthenticated()) {
         return next();
     }
@@ -40,6 +52,7 @@ const isAuthenticated = (req, res, next) => {
 
 // Create Post
 router.post('/posts', isAuthenticated, async (req, res) => {
+    console.log("POST")
     try {
         const newPost = new Post({
             title: req.body.title,
@@ -53,10 +66,12 @@ router.post('/posts', isAuthenticated, async (req, res) => {
     }
 });
 
-// Read all Posts
+
+// Read all Posts based on the authenticated user's ID
 router.get('/posts', isAuthenticated, async (req, res) => {
     try {
-        const posts = await Post.find().populate('author').exec();
+        // Fetch posts where the author is the authenticated user
+        const posts = await Post.find({ author: req.user._id }).populate('author').exec();
         res.status(200).json(posts);
     } catch (err) {
         res.status(500).json(err);

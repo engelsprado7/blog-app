@@ -19,7 +19,9 @@ export const fetchPosts = () => {
     return async (dispatch) => {
         dispatch(fetchPostsRequest());
         try {
-            const response = await axios.get('http://localhost:5000/api/posts');
+            const response = await axios.get('http://localhost:5000/api/posts', {
+                withCredentials: true, // Include cookies for session management
+            });
             dispatch(fetchPostsSuccess(response.data));
         } catch (error) {
             dispatch(fetchPostsFailure('Error fetching posts'));
@@ -30,7 +32,9 @@ export const fetchPosts = () => {
 export const addPost = (post) => {
     return async (dispatch) => {
         try {
-            const response = await axios.post('http://localhost:5000/api/posts', post);
+            const response = await axios.post('http://localhost:5000/api/posts', post, {
+                withCredentials: true, // Include cookies for session management
+            });
             dispatch(addPostSuccess(response.data));
         } catch (error) {
             console.error('Error adding post');

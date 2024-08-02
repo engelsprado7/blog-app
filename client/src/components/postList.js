@@ -1,48 +1,70 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useSelector } from 'react-redux';
-
-const PostList = () => {
-    const [posts, setPosts] = useState([]);
-    const [error, setError] = useState(null);
-    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
-
-    useEffect(() => {
-        if (isAuthenticated) {
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { fetchPosts, deletePost } from '../actions/postsActions';
+class PostList extends Component {
+    componentDidMount() {
+        const { user, fetchPosts } = this.props;
+        if (user.isAuthenticated) {
             fetchPosts();
         }
-    }, [isAuthenticated]);
+    }
 
-    const fetchPosts = async () => {
-        try {
-            const response = await axios.get('http://localhost:5000/api/posts', {
-                withCredentials: true // Include credentials for session-based authentication
-            });
-            setPosts(response.data);
-        } catch (err) {
-            console.error('Error fetching posts:', err);
-            setError('Error fetching posts');
+    componentDidUpdate(prevProps) {
+        const { user, fetchPosts } = this.props;
+        if (user.isAuthenticated !== prevProps.user.isAuthenticated) {
+            fetchPosts();
+        }
+    }
+
+    handleDelete = (id) => {
+        const { deletePost } = this.props;
+        if (window.confirm('Are you sure you want to delete this post?')) {
+            deletePost(id);
         }
     };
 
-    if (!isAuthenticated) {
-        return <p>Please log in to view posts.</p>;
-    }
+    render() {
+        const { user, posts, loading, error } = this.props;
 
-    return (
-        <div>
-            <h2>Post List</h2>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            <ul>
-                {posts.map(post => (
-                    <li key={post._id}>
-                        <h3>{post.title}</h3>
-                        <p>{post.content}</p>
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
+        if (!user.isAuthenticated) {
+            return <p>Please log in to view posts.</p>;
+        }
+
+        if (loading) {
+            return <p>Loading...</p>;
+        }
+
+        if (error) {
+            return <p style={{ color: 'red' }}>{error}</p>;
+        }
+
+        return (
+            <div>
+                <h2>Post List</h2>
+                <ul>
+                    {posts.map((post) => (
+                        <li key={post._id}>
+                            <h3>{post.title}</h3>
+                            <p>{post.content}</p>
+                            <button onClick={() => this.handleDelete(post._id)}>Delete</button>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        );
+    }
+}
+
+const mapStateToProps = (state) => ({
+    user: state.auth,
+    posts: state.posts.posts,
+    loading: state.posts.loading,
+    error: state.posts.error
+});
+
+const mapDispatchToProps = {
+    fetchPosts,
+    deletePost
 };
 
-export default PostList;
+export default connect(mapStateToProps, mapDispatchToProps)(PostList);

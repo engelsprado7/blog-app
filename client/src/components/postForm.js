@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-
+import { connect } from 'react-redux';
+import { addPost } from '../actions/postsActions';
 class PostForm extends Component {
     state = {
         title: '',
@@ -12,7 +13,7 @@ class PostForm extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        this.props.onAddPost(this.state);
+        this.props.addPost(this.state);
         this.setState({ title: '', content: '' });
     };
 
@@ -42,4 +43,9 @@ class PostForm extends Component {
     }
 }
 
-export default PostForm;
+const mapDispatchToProps = {
+    addPost
+};
+
+export default connect(null, mapDispatchToProps)(PostForm);
+

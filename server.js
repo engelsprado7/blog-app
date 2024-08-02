@@ -1,23 +1,28 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const MongoStore = require('connect-mongo');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('./models/User'); // Create this model
 const cors = require('cors');
-
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
 const app = express();
 
-const corsOptions = {
-    origin: 'http://localhost:3000', // Replace with your frontend URL
-    methods: 'GET,POST,PUT,DELETE',
-    credentials: true,
-};
+//Since we are running different port for client side and server side code
+//Such as localhost 3000 for client side and localhost 5000 for the server
+//Cors can help us to avoid the cors policy
+app.use(
+    cors({
+        origin: 'http://localhost:3000',
+        credentials: true,
+    })
+);
 
-app.use(cors(corsOptions)); // Add CORS support
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
+app.use(cookieParser('hello-world'))
 // Replace the following with your MongoDB Atlas connection string
 const uri = "mongodb+srv://engels:Rc2ptGmleaXtjeZN@cluster0.mgjqskg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
@@ -26,17 +31,26 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
     .catch(err => console.log(err));
 
 // Passport configuration
-app.use(require('express-session')({
-    secret: 'your secret',
-    resave: false,
-    saveUninitialized: false
-}));
+//session configuration
+app.use(
+    session({
+        secret: 'Our secret.',
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+            maxAge: 1000 * 60 * 60 * 24 // 1 day
+        }
+    })
+);
+
+
+//initialize passport.js with session
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+// Passport config
+require('./passport/index')(passport);
+
 
 // Routes
 app.use('/api', require('./routes/api')); // Create this route
