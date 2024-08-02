@@ -1,17 +1,26 @@
 import axios from 'axios';
 
 // Action Types
-const FETCH_POSTS_REQUEST = 'FETCH_POSTS_REQUEST';
-const FETCH_POSTS_SUCCESS = 'FETCH_POSTS_SUCCESS';
-const FETCH_POSTS_FAILURE = 'FETCH_POSTS_FAILURE';
-const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
-const DELETE_POST_SUCCESS = 'DELETE_POST_SUCCESS';
-
+export const FETCH_POSTS_REQUEST = 'FETCH_POSTS_REQUEST';
+export const FETCH_POSTS_SUCCESS = 'FETCH_POSTS_SUCCESS';
+export const FETCH_POSTS_FAILURE = 'FETCH_POSTS_FAILURE';
+export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
+export const DELETE_POST_SUCCESS = 'DELETE_POST_SUCCESS';
+// Action Types
+export const EDIT_POST_REQUEST = 'EDIT_POST_REQUEST';
+export const EDIT_POST_SUCCESS = 'EDIT_POST_SUCCESS';
+export const EDIT_POST_FAILURE = 'EDIT_POST_FAILURE';
 // Action Creators
 const fetchPostsRequest = () => ({ type: FETCH_POSTS_REQUEST });
 const fetchPostsSuccess = (posts) => ({ type: FETCH_POSTS_SUCCESS, payload: posts });
 const fetchPostsFailure = (error) => ({ type: FETCH_POSTS_FAILURE, payload: error });
+
+const editPostRequest = () => ({ type: EDIT_POST_REQUEST });
+const editPostSuccess = (post) => ({ type: EDIT_POST_SUCCESS, payload: post });
+const editPostFailure = (error) => ({ type: EDIT_POST_FAILURE, payload: error });
+
 const addPostSuccess = (post) => ({ type: ADD_POST_SUCCESS, payload: post });
+
 const deletePostSuccess = (id) => ({ type: DELETE_POST_SUCCESS, payload: id });
 
 // Thunk Actions
@@ -40,6 +49,21 @@ export const addPost = (post) => {
             console.error('Error adding post');
         }
     };
+};
+
+// Thunk Action for Editing a Post
+export const editPost = (id, postData) => async (dispatch) => {
+    console.log("EDIT POST")
+    dispatch(editPostRequest());
+    try {
+        const response = await axios.put(`http://localhost:5000/api/posts/${id}`, postData, {
+            withCredentials: true, // Include cookies for session management
+        });
+        console.log("EDIT response", response.data)
+        dispatch(editPostSuccess(response.data));
+    } catch (error) {
+        dispatch(editPostFailure(error.response ? error.response.data : 'Error editing post'));
+    }
 };
 
 export const deletePost = (id) => {

@@ -1,7 +1,16 @@
+// components/PostList.js
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchPosts, deletePost } from '../actions/postsActions';
+import EditPostForm from './EditPostForm';
+import Modal from '../ui/Modal';
+
 class PostList extends Component {
+    state = {
+        editingPost: null,
+        isModalOpen: false
+    };
+
     componentDidMount() {
         const { user, fetchPosts } = this.props;
         if (user.isAuthenticated) {
@@ -23,9 +32,18 @@ class PostList extends Component {
         }
     };
 
+    startEditing = (post) => {
+        this.setState({ editingPost: post, isModalOpen: true });
+    };
+
+    closeModal = () => {
+        this.setState({ editingPost: null, isModalOpen: false });
+    };
+
     render() {
         const { user, posts, loading, error } = this.props;
-
+        const { editingPost, isModalOpen } = this.state;
+        console.log("POTS LIST ", posts)
         if (!user.isAuthenticated) {
             return <p>Please log in to view posts.</p>;
         }
@@ -41,12 +59,21 @@ class PostList extends Component {
         return (
             <div>
                 <h2>Post List</h2>
+                <Modal isOpen={isModalOpen} onClose={this.closeModal}>
+                    {editingPost && (
+                        <EditPostForm
+                            post={editingPost}
+                            onCancel={this.closeModal}
+                        />
+                    )}
+                </Modal>
                 <ul>
-                    {posts.map((post) => (
+                    {posts && posts.map((post) => (
                         <li key={post._id}>
                             <h3>{post.title}</h3>
                             <p>{post.content}</p>
                             <button onClick={() => this.handleDelete(post._id)}>Delete</button>
+                            <button onClick={() => this.startEditing(post)}>Edit</button>
                         </li>
                     ))}
                 </ul>
