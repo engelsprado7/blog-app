@@ -1,0 +1,55 @@
+// postForm.scss
+$post-bg: #f5f8fa;
+$post-padding: 20px;
+$post-border-radius: 8px;
+$post-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+$post-input-padding: 15px;
+$post-input-margin-bottom: 10px;
+$post-input-border-radius: 4px;
+$post-input-border: 1px solid #e1e8ed;
+$post-button-bg: #1da1f2;
+$post-button-color: #fff;
+$post-button-border: none;
+$post-button-padding: 10px 20px;
+$post-button-border-radius: 25px;
+$post-button-hover-bg: darken($post-button-bg, 10%);
+
+.post-form-container {
+  background: $post-bg;
+  padding: $post-padding;
+  border-radius: $post-border-radius;
+  box-shadow: $post-box-shadow;
+  margin: 0 auto 20px;
+  max-width: 600px;
+
+  input,
+  textarea {
+    width: 100%;
+    padding: $post-input-padding;
+    margin-bottom: $post-input-margin-bottom;
+    border-radius: $post-input-border-radius;
+    border: $post-input-border;
+    font-size: 16px;
+    resize: none;
+  }
+
+  textarea {
+    height: 100px;
+  }
+
+  button {
+    background: $post-button-bg;
+    color: $post-button-color;
+    border: $post-button-border;
+    padding: $post-button-padding;
+    border-radius: $post-button-border-radius;
+    cursor: pointer;
+    font-size: 16px;
+    display: block;
+    margin-left: auto;
+
+    &:hover {
+      background: $post-button-hover-bg;
+    }
+  }
+}

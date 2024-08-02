@@ -1,0 +1,64 @@
+// styles/forms.scss
+
+.edit-post-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background-color: $background-color;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: $box-shadow;
+  max-width: 500px;
+  margin: 0 auto;
+
+  &__input,
+  &__textarea {
+    width: 100%;
+    padding: $padding;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    font-size: $font-size;
+  }
+
+  &__input {
+    height: 40px;
+  }
+
+  &__textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+
+  &__button {
+    padding: $padding 15px;
+    border: none;
+    border-radius: $border-radius;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+
+    &--submit {
+      background-color: $primary-color;
+      color: #ffffff;
+
+      &:hover {
+        background-color: $primary-hover-color;
+      }
+    }
+
+    &--cancel {
+      background-color: $secondary-color;
+      color: #ffffff;
+
+      &:hover {
+        background-color: $secondary-hover-color;
+      }
+    }
+  }
+}

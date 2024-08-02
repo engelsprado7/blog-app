@@ -1,4 +1,3 @@
-// components/PostList.js
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchPosts, deletePost } from '../actions/postsActions';
@@ -43,7 +42,7 @@ class PostList extends Component {
     render() {
         const { user, posts, loading, error } = this.props;
         const { editingPost, isModalOpen } = this.state;
-        console.log("POTS LIST ", posts)
+
         if (!user.isAuthenticated) {
             return <p>Please log in to view posts.</p>;
         }
@@ -57,7 +56,7 @@ class PostList extends Component {
         }
 
         return (
-            <div>
+            <div className="post-list">
                 <h2>Post List</h2>
                 <Modal isOpen={isModalOpen} onClose={this.closeModal}>
                     {editingPost && (
@@ -67,13 +66,15 @@ class PostList extends Component {
                         />
                     )}
                 </Modal>
-                <ul>
+                <ul className="post-list__items">
                     {posts && posts.map((post) => (
-                        <li key={post._id}>
-                            <h3>{post.title}</h3>
-                            <p>{post.content}</p>
-                            <button onClick={() => this.handleDelete(post._id)}>Delete</button>
-                            <button onClick={() => this.startEditing(post)}>Edit</button>
+                        <li key={post._id} className="post-list__item">
+                            <h3 className="post-list__title">{post.title}</h3>
+                            <p className="post-list__content">{post.content}</p>
+                            <div className="post-list__actions">
+                                <button className="post-list__button post-list__button--edit" onClick={() => this.startEditing(post)}>Edit</button>
+                                <button className="post-list__button post-list__button--delete" onClick={() => this.handleDelete(post._id)}>Delete</button>
+                            </div>
                         </li>
                     ))}
                 </ul>

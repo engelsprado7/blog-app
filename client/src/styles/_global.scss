@@ -1,0 +1,19 @@
+// _global.scss
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: $spacing-unit * 2;
+}
+
+.header {
+  background-color: $white;
+  padding: $spacing-unit;
+  border-bottom: 1px solid $light-gray;
+
+  .logo {
+    font-size: $font-size-large;
+    color: $primary-color;
+  }
+}

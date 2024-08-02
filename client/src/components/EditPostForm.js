@@ -1,11 +1,11 @@
-// components/PostForm.js
 import React, { Component } from 'react';
-import '../styles/forms.scss';
+import { connect } from 'react-redux';
+import { editPost } from '../actions/postsActions';
 
-class PostForm extends Component {
+class EditPostForm extends Component {
     state = {
-        title: '',
-        content: ''
+        title: this.props.post.title,
+        content: this.props.post.content
     };
 
     handleChange = (event) => {
@@ -14,8 +14,10 @@ class PostForm extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        this.props.onAddPost(this.state);
-        this.setState({ title: '', content: '' });
+        const { title, content } = this.state;
+        const { post, editPost, onCancel } = this.props;
+        editPost(post._id, { title, content });
+        onCancel();
     };
 
     render() {
@@ -23,7 +25,7 @@ class PostForm extends Component {
         const { onCancel } = this.props;
 
         return (
-            <form className="form-container" onSubmit={this.handleSubmit}>
+            <form className="edit-post-form" onSubmit={this.handleSubmit}>
                 <input
                     type="text"
                     name="title"
@@ -31,6 +33,7 @@ class PostForm extends Component {
                     onChange={this.handleChange}
                     placeholder="Title"
                     required
+                    className="edit-post-form__input"
                 />
                 <textarea
                     name="content"
@@ -38,14 +41,19 @@ class PostForm extends Component {
                     onChange={this.handleChange}
                     placeholder="Content"
                     required
+                    className="edit-post-form__textarea"
                 />
-                <div>
-                    <button type="submit">Update Post</button>
-                    <button type="button" className="cancel-button" onClick={onCancel}>Cancel</button>
+                <div className="edit-post-form__buttons">
+                    <button type="submit" className="edit-post-form__button edit-post-form__button--submit">Update Post</button>
+                    <button type="button" className="edit-post-form__button edit-post-form__button--cancel" onClick={onCancel}>Cancel</button>
                 </div>
             </form>
         );
     }
 }
 
-export default PostForm;
+const mapDispatchToProps = {
+    editPost
+};
+
+export default connect(null, mapDispatchToProps)(EditPostForm);

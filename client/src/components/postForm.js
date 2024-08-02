@@ -1,6 +1,8 @@
+// components/PostForm.js
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { addPost } from '../actions/postsActions';
+
 class PostForm extends Component {
     state = {
         title: '',
@@ -21,7 +23,7 @@ class PostForm extends Component {
         const { title, content } = this.state;
 
         return (
-            <form onSubmit={this.handleSubmit}>
+            <form className="post-form-container" onSubmit={this.handleSubmit}>
                 <input
                     type="text"
                     name="title"
@@ -34,10 +36,10 @@ class PostForm extends Component {
                     name="content"
                     value={content}
                     onChange={this.handleChange}
-                    placeholder="Content"
+                    placeholder="What's happening?"
                     required
                 />
-                <button type="submit">Add Post</button>
+                <button type="submit">Post</button>
             </form>
         );
     }
@@ -48,4 +50,3 @@ const mapDispatchToProps = {
 };
 
 export default connect(null, mapDispatchToProps)(PostForm);
-
