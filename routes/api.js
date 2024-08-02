@@ -27,50 +27,73 @@ router.get('/logout', (req, res) => {
     res.status(200).json({ message: 'Logged out' });
 });
 
-// CRUD for posts
+
+// Middleware to ensure user is authenticated
+const isAuthenticated = (req, res, next) => {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.status(401).json({ message: 'You must be logged in to perform this action' });
+};
+
 // Create Post
-router.post('/posts', (req, res) => {
-    const newPost = new Post({
-        title: req.body.title,
-        content: req.body.content,
-        author: req.user._id
-    });
-    newPost.save((err, post) => {
-        if (err) return res.status(500).json(err);
+router.post('/posts', isAuthenticated, async (req, res) => {
+    try {
+        const newPost = new Post({
+            title: req.body.title,
+            content: req.body.content,
+            author: req.user._id
+        });
+        const post = await newPost.save();
         res.status(200).json(post);
-    });
+    } catch (err) {
+        res.status(500).json(err);
+    }
 });
 
 // Read all Posts
-router.get('/posts', (req, res) => {
-    Post.find().populate('author').exec((err, posts) => {
-        if (err) return res.status(500).json(err);
+router.get('/posts', isAuthenticated, async (req, res) => {
+    try {
+        const posts = await Post.find().populate('author').exec();
         res.status(200).json(posts);
-    });
+    } catch (err) {
+        res.status(500).json(err);
+    }
 });
 
 // Read a single Post
-router.get('/posts/:id', (req, res) => {
-    Post.findById(req.params.id).populate('author').exec((err, post) => {
-        if (err) return res.status(500).json(err);
+router.get('/posts/:id', isAuthenticated, async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id).populate('author').exec();
         res.status(200).json(post);
-    });
+    } catch (err) {
+        res.status(500).json(err);
+    }
 });
 
 // Update Post
-router.put('/posts/:id', (req, res) => {
-    Post.findByIdAndUpdate(req.params.id, req.body, { new: true }, (err, post) => {
-        if (err) return res.status(500).json(err);
+router.put('/posts/:id', isAuthenticated, async (req, res) => {
+    try {
+        const post = await Post.findByIdAndUpdate(req.params.id, req.body, { new: true });
         res.status(200).json(post);
-    });
+    } catch (err) {
+        res.status(500).json(err);
+    }
 });
 
 // Delete Post
-router.delete('/posts/:id', (req, res) => {
-    Post.findByIdAndRemove(req.params.id, (err) => {
-        if (err) return res.status(500).json(err);
+router.delete('/posts/:id', isAuthenticated, async (req, res) => {
+    console.log("REQ", req.params);
+    try {
+        const post = await Post.findByIdAndDelete(req.params.id);
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
         res.status(200).json({ message: 'Post deleted' });
-    });
+    } catch (err) {
+        console.error("ERROR", err);
+        res.status(500).json({ error: err.message });
+    }
 });
 
 module.exports = router;

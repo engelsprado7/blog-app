@@ -11,8 +11,12 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// MongoDB connection
-mongoose.connect('mongodb://localhost:27017/blog-app', { useNewUrlParser: true, useUnifiedTopology: true });
+// Replace the following with your MongoDB Atlas connection string
+const uri = "mongodb+srv://engels:Rc2ptGmleaXtjeZN@cluster0.mgjqskg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('MongoDB connected...'))
+    .catch(err => console.log(err));
 
 // Passport configuration
 app.use(require('express-session')({
