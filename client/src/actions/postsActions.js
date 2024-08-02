@@ -45,7 +45,9 @@ export const addPost = (post) => {
 export const deletePost = (id) => {
     return async (dispatch) => {
         try {
-            await axios.delete(`http://localhost:5000/api/posts/${id}`);
+            await axios.delete(`http://localhost:5000/api/posts/${id}`, {
+                withCredentials: true, // Include cookies for session management
+            });
             dispatch(deletePostSuccess(id));
         } catch (error) {
             console.error('Error deleting post');
