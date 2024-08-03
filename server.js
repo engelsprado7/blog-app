@@ -32,6 +32,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
 
 // Passport configuration
 //session configuration
+app.set('trust proxy', 1) // trust first proxy
 app.use(
     session({
         secret: 'Our secret.',
