@@ -1,5 +1,5 @@
 import axios from 'axios';
-const apiUrl = process.env.URL_SERVER;
+const apiUrl = process.env.REACT_APP_URL_SERVER;
 // Action Types
 export const FETCH_POSTS_REQUEST = 'FETCH_POSTS_REQUEST';
 export const FETCH_POSTS_SUCCESS = 'FETCH_POSTS_SUCCESS';
