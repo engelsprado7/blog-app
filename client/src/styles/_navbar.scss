@@ -1,0 +1,43 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $padding;
+  background-color: $background-color;
+  border-bottom: 1px solid $border-color;
+  box-shadow: $box-shadow;
+
+  .navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: $primary-color;
+
+    a {
+      text-decoration: none;
+      color: $primary-color;
+    }
+  }
+
+  .navbar-links {
+    display: flex;
+    gap: $input-margin-bottom;
+
+    a {
+      text-decoration: none;
+      color: $primary-color;
+      font-size: $font-size;
+      padding: $input-padding;
+      border-radius: $border-radius;
+
+      &:hover {
+        background-color: $secondary-color;
+        color: $background-color;
+      }
+
+      &:focus {
+        outline: none;
+        box-shadow: 0 0 5px $input-focus-border-color;
+      }
+    }
+  }
+}

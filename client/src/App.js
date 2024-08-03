@@ -4,9 +4,12 @@ import PostList from './components/Posts';
 import PostForm from './components/postForm';
 import Register from './components/register';
 import Login from './components/login';
+import NavBar from './components/navBar';
 const App = () => (
   <Router>
     <div className="App">
+      <NavBar />
+
       <Switch>
         <Route path="/register" component={Register} />
         <Route path="/login" component={Login} />
