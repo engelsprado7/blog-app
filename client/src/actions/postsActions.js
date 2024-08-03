@@ -1,5 +1,5 @@
 import axios from 'axios';
-const apiUrl = process.env.URL_SERVER || 'http://localhost:5000';
+const apiUrl = process.env.URL_SERVER;
 // Action Types
 export const FETCH_POSTS_REQUEST = 'FETCH_POSTS_REQUEST';
 export const FETCH_POSTS_SUCCESS = 'FETCH_POSTS_SUCCESS';
