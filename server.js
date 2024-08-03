@@ -15,7 +15,7 @@ const app = express();
 //Cors can help us to avoid the cors policy
 app.use(
     cors({
-        origin: 'https://blog-app-client-nxlr.onrender.com',
+        origin: 'https://blog-app-beta-lilac.vercel.app',
         credentials: true,
     })
 );
