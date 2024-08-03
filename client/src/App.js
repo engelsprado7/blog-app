@@ -1,10 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Register from './components/Register';
-import Login from './components/Login';
-import PostList from './components/PostList';
 import PostForm from './components/PostForm';
-
+import Register from './components/register';
+import Login from './components/login';
+import PostList from './components/posts';
 const App = () => (
   <Router>
     <div className="App">
