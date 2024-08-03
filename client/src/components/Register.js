@@ -24,9 +24,9 @@ class Register extends Component {
         const { username, password, error } = this.state;
 
         return (
-            <div>
+            <div className="register-container">
                 <h2>Register</h2>
-                {error && <p style={{ color: 'red' }}>{error}</p>}
+                {error && <p className="error-message">{error}</p>}
                 <form onSubmit={this.handleSubmit}>
                     <input
                         type="text"

@@ -24,9 +24,9 @@ class Login extends Component {
         const { username, password, error } = this.state;
 
         return (
-            <div>
+            <div className="login-container">
                 <h2>Login</h2>
-                {error && <p style={{ color: 'red' }}>{error}</p>}
+                {error && <p className="error-message">{error}</p>}
                 <form onSubmit={this.handleSubmit}>
                     <input
                         type="text"
