@@ -46,9 +46,14 @@ const postsReducer = (state = initialState, action) => {
             };
 
         case DELETE_POST_SUCCESS:
-            console.log("delete", state.posts)
-            return { ...state, posts: state.posts.posts.filter(post => post._id !== action.payload) };
-
+            console.log("delete", state.posts);
+            // Filter out the deleted post based on the payload ID
+            const filteredPosts = state.posts.posts.filter(post => post._id !== action.payload);
+            return {
+                ...state,
+                posts: { posts: filteredPosts },
+                totalPages: Math.ceil(filteredPosts.length / POSTS_PER_PAGE)
+            };
         case EDIT_POST_SUCCESS:
             const editedPosts = state.posts.posts.map(post =>
                 post._id === action.payload._id ? action.payload : post
