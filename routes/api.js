@@ -80,6 +80,7 @@ router.get('/posts', isAuthenticated, async (req, res) => {
             .limit(parseInt(limit))
             .exec();
         const totalPosts = await Post.countDocuments();
+        console.log("TOTAL POST", totalPosts)
         res.status(200).json({
             posts,
             totalPages: Math.ceil(totalPosts / limit),
