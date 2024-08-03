@@ -15,7 +15,7 @@ const app = express();
 //Cors can help us to avoid the cors policy
 app.use(
     cors({
-        origin: 'http://localhost:3000',
+        origin: 'https://66ad7d3ffa3655ebd6c7d075--cheery-frangollo-62646a.netlify.app',
         credentials: true,
     })
 );
