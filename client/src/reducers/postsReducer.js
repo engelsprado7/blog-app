@@ -50,13 +50,16 @@ const postsReducer = (state = initialState, action) => {
             return { ...state, posts: state.posts.posts.filter(post => post._id !== action.payload) };
 
         case EDIT_POST_SUCCESS:
+            const editedPosts = state.posts.posts.map(post =>
+                post._id === action.payload._id ? action.payload : post
+            );
+            console.log("edited", editedPosts)
             return {
                 ...state,
                 loading: false,
-                posts: state.posts.posts.map(post =>
-                    post._id === action.payload._id ? action.payload : post
-                )
+                posts: { posts: editedPosts }
             };
+
         case EDIT_POST_REQUEST:
             return {
                 ...state,

@@ -23,7 +23,15 @@ export const loginUser = (userData) => async (dispatch) => {
         dispatch({ type: 'AUTH_ERROR', payload: error.response.data });
     }
 };
-export const logout = () => async (dispatch) => {
-    await axios.get('/api/logout');
-    dispatch({ type: 'LOGOUT' });
+
+export const logoutUser = () => async (dispatch) => {
+    try {
+        const response = await axios.get(`${apiUrl}/api/logout`, {
+            withCredentials: true
+        });
+        console.log("logiyt", response)
+        dispatch({ type: 'LOGOUT_SUCCESS' });
+    } catch (error) {
+        console.error('Error logging out:', error);
+    }
 };

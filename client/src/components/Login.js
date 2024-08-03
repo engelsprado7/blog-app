@@ -15,8 +15,9 @@ class Login extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        this.props.loginUser(this.state).catch((err) => {
+        this.props.loginUser(this.state).then(this.props.history.push('/')).catch((err) => {
             this.setState({ error: err.message });
+
         });
     };
 

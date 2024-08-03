@@ -1,8 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import { logoutUser } from '../actions/authActions'
 
-const Navbar = ({ user }) => {
+const Navbar = ({ user, logoutUser, history }) => {
+    const handleLogout = () => {
+        logoutUser();
+        history.push('/login'); // Redirect to login page after logout
+    };
+
     return (
         <nav className="navbar">
             <div className="navbar-brand">
@@ -11,14 +17,12 @@ const Navbar = ({ user }) => {
             <div className="navbar-links">
                 {user.isAuthenticated ? (
                     <>
-                        <Link to="/posts">Posts</Link>
-                        <Link to="/profile">Profile</Link>
-                        <Link to="/logout">Logout</Link>
+                        <button onClick={handleLogout} className="navbar-button">Logout</button>
                     </>
                 ) : (
                     <>
-                        <Link to="/login">Login</Link>
-                        <Link to="/register">Register</Link>
+                        <Link to="/login" className="navbar-button">Login</Link>
+                        <Link to="/register" className="navbar-button">Register</Link>
                     </>
                 )}
             </div>
@@ -30,4 +34,8 @@ const mapStateToProps = (state) => ({
     user: state.auth,
 });
 
-export default connect(mapStateToProps)(Navbar);
+const mapDispatchToProps = {
+    logoutUser,
+};
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Navbar));

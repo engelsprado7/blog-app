@@ -27,6 +27,7 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
 
 
 router.get('/logout', (req, res) => {
+    console.log("LOGOUT")
     req.logout((err) => {
         if (err) {
             return res.status(500).json({ message: 'Error logging out', error: err });

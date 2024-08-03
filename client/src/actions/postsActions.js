@@ -26,19 +26,6 @@ const addPostSuccess = (post) => ({ type: ADD_POST_SUCCESS, payload: post });
 const deletePostSuccess = (id) => ({ type: DELETE_POST_SUCCESS, payload: id });
 
 // Thunk Actions
-// export const fetchPosts = () => {
-//     return async (dispatch) => {
-//         dispatch(fetchPostsRequest());
-//         try {
-//             const response = await axios.get(`${apiUrl}/api/posts`, {
-//                 withCredentials: true, // Include cookies for session management
-//             });
-//             dispatch(fetchPostsSuccess(response.data));
-//         } catch (error) {
-//             dispatch(fetchPostsFailure('Error fetching posts'));
-//         }
-//     };
-// };
 
 export const fetchPosts = (page = 1, limit = 3) => async (dispatch) => {
     dispatch(fetchPostsRequest());
@@ -55,17 +42,6 @@ export const fetchPosts = (page = 1, limit = 3) => async (dispatch) => {
     }
 };
 
-// export const addPost = (post) => async (dispatch) => {
-//     try {
-//         const response = await axios.post(`${apiUrl}/api/posts`, post, {
-//             withCredentials: true, // Include cookies for session management
-//         });
-//         console.log("response", response)
-//         dispatch(addPostSuccess(response.data));
-//     } catch (error) {
-//         console.error('Error adding post');
-//     }
-// };
 export const addPost = (post) => async (dispatch) => {
     try {
         const response = await axios.post(`${apiUrl}/api/posts`, post, {
