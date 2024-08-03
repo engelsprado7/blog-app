@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import PostList from './components/posts';
 import PostForm from './components/postForm';
 import Register from './components/Register';
-import Login from './components/login';
+import Login from './components/Login';
 import NavBar from './components/navBar';
 const App = () => (
   <Router>
