@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchPosts, deletePost } from '../actions/postsActions';
-import EditPostForm from './EditPostForm';
+import EditPostForm from './editPost';
 import Modal from '../ui/Modal';
 
 class PostList extends Component {
