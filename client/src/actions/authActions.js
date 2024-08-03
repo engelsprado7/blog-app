@@ -1,8 +1,9 @@
 import axios from 'axios';
 
+const apiUrl = process.env.URL_SERVER || 'http://localhost:5000';
 export const registerUser = (userData) => async (dispatch) => {
     try {
-        const res = await axios.post('http://localhost:5000/api/register', userData);
+        const res = await axios.post(`${apiUrl}/api/register`, userData);
         dispatch({ type: 'REGISTER_SUCCESS', payload: res.data });
     } catch (error) {
         dispatch({ type: 'AUTH_ERROR', payload: error.response.data });
@@ -11,7 +12,7 @@ export const registerUser = (userData) => async (dispatch) => {
 
 export const loginUser = (userData) => async (dispatch) => {
     try {
-        const res = await axios.post('http://localhost:5000/api/login', userData, {
+        const res = await axios.post(`${apiUrl}/api/login`, userData, {
             withCredentials: true
         });
         console.log("RES", res.data);
