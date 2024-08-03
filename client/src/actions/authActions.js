@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const apiUrl = process.env.URL_SERVER || 'http://localhost:5000';
+const apiUrl = process.env.URL_SERVER;
 export const registerUser = (userData) => async (dispatch) => {
     try {
         const res = await axios.post(`${apiUrl}/api/register`, userData);
