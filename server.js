@@ -40,8 +40,6 @@ app.use(
         saveUninitialized: false,
         cookie: {
             maxAge: 1000 * 60 * 60 * 24, // 1 day
-            httpOnly: false,
-            domain: 'blog-app-backend-st7w.onrender.com',
         }
     })
 );
