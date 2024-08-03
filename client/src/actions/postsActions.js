@@ -1,6 +1,6 @@
 import axios from 'axios';
-// const apiUrl = process.env.REACT_APP_URL_SERVER || 'https://localhost:5000';
-const apiUrl = 'http://localhost:5000';
+const apiUrl = process.env.REACT_APP_URL_SERVER || 'https://localhost:5000';
+// const apiUrl = 'http://localhost:5000';
 
 // Action Types
 export const FETCH_POSTS_REQUEST = 'FETCH_POSTS_REQUEST';
