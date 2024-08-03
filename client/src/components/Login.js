@@ -17,7 +17,6 @@ class Login extends Component {
         event.preventDefault();
         this.props.loginUser(this.state).then(this.props.history.push('/')).catch((err) => {
             this.setState({ error: err.message });
-
         });
     };
 

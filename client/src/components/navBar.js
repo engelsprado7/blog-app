@@ -12,7 +12,7 @@ const Navbar = ({ user, logoutUser, history }) => {
     return (
         <nav className="navbar">
             <div className="navbar-brand">
-                <Link to="/">MyApp</Link>
+                <Link to="/">Blog App</Link>
             </div>
             <div className="navbar-links">
                 {user.isAuthenticated ? (
