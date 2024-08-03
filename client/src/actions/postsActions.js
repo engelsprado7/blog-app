@@ -1,5 +1,7 @@
 import axios from 'axios';
-const apiUrl = process.env.REACT_APP_URL_SERVER;
+// const apiUrl = process.env.REACT_APP_URL_SERVER || 'https://localhost:5000';
+const apiUrl = 'http://localhost:5000';
+
 // Action Types
 export const FETCH_POSTS_REQUEST = 'FETCH_POSTS_REQUEST';
 export const FETCH_POSTS_SUCCESS = 'FETCH_POSTS_SUCCESS';
@@ -24,32 +26,66 @@ const addPostSuccess = (post) => ({ type: ADD_POST_SUCCESS, payload: post });
 const deletePostSuccess = (id) => ({ type: DELETE_POST_SUCCESS, payload: id });
 
 // Thunk Actions
-export const fetchPosts = () => {
-    return async (dispatch) => {
-        dispatch(fetchPostsRequest());
-        try {
-            const response = await axios.get(`${apiUrl}/api/posts`, {
-                withCredentials: true, // Include cookies for session management
-            });
-            dispatch(fetchPostsSuccess(response.data));
-        } catch (error) {
-            dispatch(fetchPostsFailure('Error fetching posts'));
-        }
-    };
+// export const fetchPosts = () => {
+//     return async (dispatch) => {
+//         dispatch(fetchPostsRequest());
+//         try {
+//             const response = await axios.get(`${apiUrl}/api/posts`, {
+//                 withCredentials: true, // Include cookies for session management
+//             });
+//             dispatch(fetchPostsSuccess(response.data));
+//         } catch (error) {
+//             dispatch(fetchPostsFailure('Error fetching posts'));
+//         }
+//     };
+// };
+
+export const fetchPosts = (page = 1, limit = 3) => async (dispatch) => {
+    dispatch(fetchPostsRequest());
+
+    try {
+        const response = await axios.get(`${apiUrl}/api/posts`, {
+            params: { page, limit },
+            withCredentials: true
+        });
+        console.log("POSTS", response.data)
+        dispatch(fetchPostsSuccess(response.data));
+    } catch (error) {
+        dispatch(fetchPostsFailure('Error fetching posts'));
+    }
 };
 
-export const addPost = (post) => {
-    return async (dispatch) => {
-        try {
-            const response = await axios.post(`${apiUrl}/api/posts`, post, {
-                withCredentials: true, // Include cookies for session management
-            });
+// export const addPost = (post) => async (dispatch) => {
+//     try {
+//         const response = await axios.post(`${apiUrl}/api/posts`, post, {
+//             withCredentials: true, // Include cookies for session management
+//         });
+//         console.log("response", response)
+//         dispatch(addPostSuccess(response.data));
+//     } catch (error) {
+//         console.error('Error adding post');
+//     }
+// };
+export const addPost = (post) => async (dispatch) => {
+    try {
+        const response = await axios.post(`${apiUrl}/api/posts`, post, {
+            withCredentials: true, // Include cookies for session management
+        });
+        console.log("response", response);
+
+        // Check if the response status is 200
+        if (response.status === 200) {
             dispatch(addPostSuccess(response.data));
-        } catch (error) {
-            console.error('Error adding post');
+        } else {
+            console.error('Unexpected response status:', response.status);
+            console.error('Response data:', response.data);
         }
-    };
+    } catch (error) {
+        console.error('Error adding post:', error);
+        console.error('Error response:', error.response);
+    }
 };
+
 
 // Thunk Action for Editing a Post
 export const editPost = (id, postData) => async (dispatch) => {

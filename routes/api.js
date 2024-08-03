@@ -69,10 +69,21 @@ router.post('/posts', isAuthenticated, async (req, res) => {
 
 // Read all Posts based on the authenticated user's ID
 router.get('/posts', isAuthenticated, async (req, res) => {
+
+    const { page = 1, limit = 3 } = req.query; // Default to page 1 and limit 10
+    console.log("query", req.query)
     try {
-        // Fetch posts where the author is the authenticated user
-        const posts = await Post.find({ author: req.user._id }).populate('author').exec();
-        res.status(200).json(posts);
+        const posts = await Post.find({ author: req.user._id })
+            .populate('author')
+            .skip((page - 1) * limit)
+            .limit(parseInt(limit))
+            .exec();
+        const totalPosts = await Post.countDocuments();
+        res.status(200).json({
+            posts,
+            totalPages: Math.ceil(totalPosts / limit),
+            currentPage: page
+        });
     } catch (err) {
         res.status(500).json(err);
     }

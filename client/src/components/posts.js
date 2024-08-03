@@ -7,23 +7,31 @@ import Modal from '../ui/Modal';
 class PostList extends Component {
     state = {
         editingPost: null,
-        isModalOpen: false
+        isModalOpen: false,
+        activePage: 1
     };
 
     componentDidMount() {
         const { user, fetchPosts } = this.props;
         if (user.isAuthenticated) {
-            fetchPosts();
+            fetchPosts(this.state.activePage);
         }
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps, prevState) {
         const { user, fetchPosts } = this.props;
         if (user.isAuthenticated !== prevProps.user.isAuthenticated) {
-            fetchPosts();
+            fetchPosts(this.state.activePage);
+        }
+
+        if (this.state.activePage !== prevState.activePage) {
+            fetchPosts(this.state.activePage);
         }
     }
 
+    handlePageChange = (page) => {
+        this.setState({ activePage: page });
+    };
     handleDelete = (id) => {
         const { deletePost } = this.props;
         if (window.confirm('Are you sure you want to delete this post?')) {
@@ -40,8 +48,9 @@ class PostList extends Component {
     };
 
     render() {
-        const { user, posts, loading, error } = this.props;
-        const { editingPost, isModalOpen } = this.state;
+        const { user, posts, loading, error, totalPages } = this.props;
+        const { editingPost, isModalOpen, activePage } = this.state;
+        console.log("STATE", posts)
 
         if (!user.isAuthenticated) {
             return <p>Please log in to view posts.</p>;
@@ -67,7 +76,7 @@ class PostList extends Component {
                     )}
                 </Modal>
                 <ul className="post-list__items">
-                    {posts && posts.map((post) => (
+                    {posts.posts && posts.posts.map((post) => (
                         <li key={post._id} className="post-list__item">
                             <h3 className="post-list__title">{post.title}</h3>
                             <p className="post-list__content">{post.content}</p>
@@ -78,6 +87,18 @@ class PostList extends Component {
                         </li>
                     ))}
                 </ul>
+
+                <div className="pagination">
+                    {[...Array(totalPages).keys()].map((page) => (
+                        <button
+                            key={page + 1}
+                            className={page + 1 === activePage ? 'active' : ''}
+                            onClick={() => this.handlePageChange(page + 1)}
+                        >
+                            {page + 1}
+                        </button>
+                    ))}
+                </div>
             </div>
         );
     }
@@ -87,7 +108,9 @@ const mapStateToProps = (state) => ({
     user: state.auth,
     posts: state.posts.posts,
     loading: state.posts.loading,
-    error: state.posts.error
+    error: state.posts.error,
+    totalPages: state.posts.totalPages,
+    currentPage: state.posts.currentPage
 });
 
 const mapDispatchToProps = {

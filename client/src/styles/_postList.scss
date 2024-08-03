@@ -74,4 +74,36 @@
       }
     }
   }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 8px;
+
+    button {
+      margin: 0 5px;
+      padding: 10px 15px;
+      border: 1px solid;
+      border-radius: 4px;
+      background-color: white;
+      color: black;
+      cursor: pointer;
+      font-size: 16px;
+
+      &:hover {
+        background-color: #0d95e8;
+      }
+
+      &.active {
+        background-color: #0d95e8;
+        font-weight: bold;
+        color: white;
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
 }

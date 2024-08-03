@@ -12,10 +12,10 @@ const app = express();
 
 //Since we are running different port for client side and server side code
 //Such as localhost 3000 for client side and localhost 5000 for the server
-//Cors can help us to avoid the cors policy
+//Cors can help us to avoid the cors policy 'https://blog-app-client-nxlr.onrender.com',
 app.use(
     cors({
-        origin: 'https://blog-app-client-nxlr.onrender.com',
+        origin: 'http://localhost:3000',
         credentials: true,
     })
 );
