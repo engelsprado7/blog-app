@@ -25,7 +25,7 @@ class Login extends Component {
 
         return (
             <div className="login-container">
-                <h2>Login</h2>
+                <h2>Login {process.env.URL_SERVER}</h2>
                 {error && <p className="error-message">{error}</p>}
                 <form onSubmit={this.handleSubmit}>
                     <input
