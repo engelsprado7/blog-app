@@ -35,10 +35,8 @@ const postsReducer = (state = initialState, action) => {
         case FETCH_POSTS_FAILURE:
             return { ...state, loading: false, error: action.payload };
         case ADD_POST_SUCCESS:
-            console.log("ADD SUCCESS", state.posts.posts)
-            console.log("payload", action.payload)
+
             const updatedPosts = [...state.posts.posts, action.payload];
-            console.log("update post", updatedPosts)
             return {
                 ...state,
                 posts: { posts: updatedPosts },
@@ -46,7 +44,6 @@ const postsReducer = (state = initialState, action) => {
             };
 
         case DELETE_POST_SUCCESS:
-            console.log("delete", state.posts);
             // Filter out the deleted post based on the payload ID
             const filteredPosts = state.posts.posts.filter(post => post._id !== action.payload);
             return {
@@ -58,7 +55,6 @@ const postsReducer = (state = initialState, action) => {
             const editedPosts = state.posts.posts.map(post =>
                 post._id === action.payload._id ? action.payload : post
             );
-            console.log("edited", editedPosts)
             return {
                 ...state,
                 loading: false,
@@ -71,7 +67,6 @@ const postsReducer = (state = initialState, action) => {
                 loading: true
             };
         case EDIT_POST_FAILURE:
-            console.log("EDIT_POST_FAILURE")
 
             return {
                 ...state,

@@ -35,7 +35,6 @@ export const fetchPosts = (page = 1, limit = 3) => async (dispatch) => {
             params: { page, limit },
             withCredentials: true
         });
-        console.log("POSTS", response.data)
         dispatch(fetchPostsSuccess(response.data));
     } catch (error) {
         dispatch(fetchPostsFailure('Error fetching posts'));
@@ -47,7 +46,6 @@ export const addPost = (post) => async (dispatch) => {
         const response = await axios.post(`${apiUrl}/api/posts`, post, {
             withCredentials: true, // Include cookies for session management
         });
-        console.log("response", response);
 
         // Check if the response status is 200
         if (response.status === 200) {
@@ -65,13 +63,11 @@ export const addPost = (post) => async (dispatch) => {
 
 // Thunk Action for Editing a Post
 export const editPost = (id, postData) => async (dispatch) => {
-    console.log("EDIT POST")
     dispatch(editPostRequest());
     try {
         const response = await axios.put(`${apiUrl}/api/posts/${id}`, postData, {
             withCredentials: true, // Include cookies for session management
         });
-        console.log("EDIT response", response.data)
         dispatch(editPostSuccess(response.data));
     } catch (error) {
         dispatch(editPostFailure(error.response ? error.response.data : 'Error editing post'));

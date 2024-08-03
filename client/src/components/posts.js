@@ -50,7 +50,6 @@ class PostList extends Component {
     render() {
         const { user, posts, loading, error, totalPages } = this.props;
         const { editingPost, isModalOpen, activePage } = this.state;
-        console.log("STATE", posts)
 
         if (!user.isAuthenticated) {
             return <p>Please log in to view posts.</p>;
