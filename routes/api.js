@@ -19,7 +19,6 @@ router.post('/register', (req, res) => {
 
 // Login
 router.post('/login', passport.authenticate('local'), (req, res) => {
-    console.log("LOGIN")
     res.status(200).json(req.user);
 });
 
@@ -27,7 +26,6 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
 
 
 router.get('/logout', (req, res) => {
-    console.log("LOGOUT")
     req.logout((err) => {
         if (err) {
             return res.status(500).json({ message: 'Error logging out', error: err });
@@ -44,7 +42,6 @@ router.get('/logout', (req, res) => {
 
 // Middleware to ensure user is authenticated
 const isAuthenticated = (req, res, next) => {
-    console.log("REQ", req.user)
     if (req.isAuthenticated()) {
         return next();
     }
@@ -53,7 +50,6 @@ const isAuthenticated = (req, res, next) => {
 
 // Create Post
 router.post('/posts', isAuthenticated, async (req, res) => {
-    console.log("POST")
     try {
         const newPost = new Post({
             title: req.body.title,
@@ -72,11 +68,9 @@ router.post('/posts', isAuthenticated, async (req, res) => {
 router.get('/posts', isAuthenticated, async (req, res) => {
 
     const { page = 1, limit = 3 } = req.query; // Default to page 1 and limit 10
-    console.log("query", req.query)
     try {
         // Calculate totalPosts based on the same filter used in find
         const totalPosts = await Post.countDocuments({ author: req.user._id });
-        console.log("TOTAL POST", totalPosts);
 
         // Fetch the posts with pagination
         const posts = await Post.find({ author: req.user._id })
@@ -119,7 +113,6 @@ router.put('/posts/:id', isAuthenticated, async (req, res) => {
 
 // Delete Post
 router.delete('/posts/:id', isAuthenticated, async (req, res) => {
-    console.log("REQ", req.params);
     try {
         const post = await Post.findByIdAndDelete(req.params.id);
         if (!post) {
