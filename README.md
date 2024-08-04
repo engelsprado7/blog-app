@@ -37,7 +37,8 @@ The Blog App is a web application that allows users to create, read, update, and
 
 3. Create a `.env` file in the `client` directory and add the following variables:
     ```plaintext
-    REACT_APP_API_URL=http://localhost:5000
+    REACT_APP_URL_SERVER = 'https://blog-app-backend-st7w.onrender.com'
+    
     ```
 
 4. Start the development server:
@@ -59,10 +60,12 @@ The Blog App is a web application that allows users to create, read, update, and
 
 3. Create a `.env` file in the `server` directory with the following content:
     ```plaintext
-    MONGODB_URI="mongodb+srv://<username>:<password>@cluster0.mgjqskg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+
+    MONGODB_URI="mongodb+srv://engels:Rc2ptGmleaXtjeZN@cluster0.mgjqskg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
     SESSION_SECRET=your_session_secret
     PORT=5000
-    CLIENT_ORIGIN='http://localhost:3000'
+    CLIENT_ORIGIN='https://blog-app-client-nxlr.onrender.com'
+
     ```
 
 4. Start the server:
