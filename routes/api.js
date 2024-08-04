@@ -3,53 +3,56 @@ const router = express.Router();
 const Post = require('../models/Post');
 const User = require('../models/User');
 const passport = require('passport');
+const bcrypt = require('bcryptjs');
 
 // Register
-router.post('/register', (req, res) => {
-    User.register(new User({ username: req.body.username }), req.body.password, (err, user) => {
-        if (err) {
-            return res.status(500).json({ message: err.message });
+router.post('/register', async (req, res) => {
+    const { username, password } = req.body;
+    try {
+        const user = await User.findOne({ username });
+        if (user) {
+            return res.status(400).json({ message: 'Username already exists' });
         }
-        passport.authenticate('local')(req, res, () => {
-            res.status(200).json({ message: 'Registration successful', user });
-        });
-    });
+        const newUser = new User({ username, password });
+        newUser.password = await bcrypt.hash(password, 10);
+        await newUser.save();
+        const token = newUser.generateJWT();
+        res.json({ token });
+    } catch (err) {
+        res.status(500).json({ message: 'Error registering user' });
+    }
 });
-
 
 // Login
-router.post('/login', passport.authenticate('local'), (req, res) => {
-    res.status(200).json(req.user);
+router.post('/login', async (req, res) => {
+    const { username, password } = req.body;
+    try {
+        const user = await User.findOne({ username });
+        if (!user) {
+            return res.status(400).json({ message: 'User not found' });
+        }
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ message: 'Invalid credentials' });
+        }
+        const token = user.generateJWT();
+        res.json({ token });
+    } catch (err) {
+        res.status(500).json({ message: 'Error logging in' });
+    }
 });
-
 // Logout
 
 
+// Logout route
 router.get('/logout', (req, res) => {
-    req.logout((err) => {
-        if (err) {
-            return res.status(500).json({ message: 'Error logging out', error: err });
-        }
-        // Successfully logged out
-        req.session.destroy((err) => {
-            if (err) {
-                return res.status(500).json({ message: 'Error destroying session', error: err });
-            }
-            res.status(200).json({ message: 'Logged out successfully' });
-        });
-    });
+    // Instruct the client to remove the JWT token
+    res.status(200).json({ message: 'Logged out successfully' });
 });
 
-// Middleware to ensure user is authenticated
-const isAuthenticated = (req, res, next) => {
-    if (req.isAuthenticated()) {
-        return next();
-    }
-    res.status(401).json({ message: 'You must be logged in to perform this action' });
-};
 
 // Create Post
-router.post('/posts', isAuthenticated, async (req, res) => {
+router.post('/posts', passport.authenticate('jwt', { session: false }), async (req, res) => {
     try {
         const newPost = new Post({
             title: req.body.title,
@@ -65,7 +68,7 @@ router.post('/posts', isAuthenticated, async (req, res) => {
 
 
 // Read all Posts based on the authenticated user's ID
-router.get('/posts', isAuthenticated, async (req, res) => {
+router.get('/posts', passport.authenticate('jwt', { session: false }), async (req, res) => {
 
     const { page = 1, limit = 3 } = req.query; // Default to page 1 and limit 10
     try {
@@ -92,7 +95,7 @@ router.get('/posts', isAuthenticated, async (req, res) => {
 });
 
 // Read a single Post
-router.get('/posts/:id', isAuthenticated, async (req, res) => {
+router.get('/posts/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
     try {
         const post = await Post.findById(req.params.id).populate('author').exec();
         res.status(200).json(post);
@@ -102,7 +105,7 @@ router.get('/posts/:id', isAuthenticated, async (req, res) => {
 });
 
 // Update Post
-router.put('/posts/:id', isAuthenticated, async (req, res) => {
+router.put('/posts/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
     try {
         const post = await Post.findByIdAndUpdate(req.params.id, req.body, { new: true });
         res.status(200).json(post);
@@ -112,7 +115,7 @@ router.put('/posts/:id', isAuthenticated, async (req, res) => {
 });
 
 // Delete Post
-router.delete('/posts/:id', isAuthenticated, async (req, res) => {
+router.delete('/posts/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
     try {
         const post = await Post.findByIdAndDelete(req.params.id);
         if (!post) {

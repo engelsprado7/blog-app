@@ -27,13 +27,15 @@ const deletePostSuccess = (id) => ({ type: DELETE_POST_SUCCESS, payload: id });
 
 // Thunk Actions
 
+const getToken = () => localStorage.getItem('jwtToken');
 export const fetchPosts = (page = 1, limit = 3) => async (dispatch) => {
     dispatch(fetchPostsRequest());
-
+    const token = getToken();
     try {
         const response = await axios.get(`${apiUrl}/api/posts`, {
             params: { page, limit },
-            withCredentials: true
+            withCredentials: true,
+            headers: { Authorization: `Bearer ${token}` }
         });
         dispatch(fetchPostsSuccess(response.data));
     } catch (error) {
@@ -43,8 +45,11 @@ export const fetchPosts = (page = 1, limit = 3) => async (dispatch) => {
 
 export const addPost = (post) => async (dispatch) => {
     try {
+        const token = getToken();
+
         const response = await axios.post(`${apiUrl}/api/posts`, post, {
-            withCredentials: true, // Include cookies for session management
+            headers: { Authorization: `Bearer ${token}` },
+            withCredentials: true,
         });
 
         // Check if the response status is 200
@@ -64,10 +69,14 @@ export const addPost = (post) => async (dispatch) => {
 // Thunk Action for Editing a Post
 export const editPost = (id, postData) => async (dispatch) => {
     dispatch(editPostRequest());
+    const token = getToken();
     try {
         const response = await axios.put(`${apiUrl}/api/posts/${id}`, postData, {
-            withCredentials: true, // Include cookies for session management
+            headers: { Authorization: `Bearer ${token}` },
+            withCredentials: true,
+
         });
+        console.log("RESPONSE edit", response.data)
         dispatch(editPostSuccess(response.data));
     } catch (error) {
         dispatch(editPostFailure(error.response ? error.response.data : 'Error editing post'));
@@ -77,8 +86,11 @@ export const editPost = (id, postData) => async (dispatch) => {
 export const deletePost = (id) => {
     return async (dispatch) => {
         try {
+            const token = getToken();
+
             await axios.delete(`${apiUrl}/api/posts/${id}`, {
-                withCredentials: true, // Include cookies for session management
+                headers: { Authorization: `Bearer ${token}` },
+                withCredentials: true,
             });
             dispatch(deletePostSuccess(id));
         } catch (error) {

@@ -51,7 +51,6 @@ class PostList extends Component {
     render() {
         const { user, posts, loading, error, totalPages } = this.props;
         const { editingPost, isModalOpen, activePage } = this.state;
-
         if (!user.isAuthenticated) {
             return <p>Please log in to view posts.</p>;
         }
@@ -67,6 +66,7 @@ class PostList extends Component {
         return (
             <div className="post-list">
                 <h2>Post List</h2>
+
                 <Modal isOpen={isModalOpen} onClose={this.closeModal}>
                     {editingPost && (
                         <EditPostForm
@@ -81,7 +81,7 @@ class PostList extends Component {
                             <h3 className="post-list__title">{post.title}</h3>
                             <p className="post-list__content">{post.content}</p>
                             <div className="post-list__metadata">
-                                <span className="post-list__author">By: {post.author.username}</span>
+                                <span className="post-list__author">By: {user.user.username}</span>
                                 <span className="post-list__date">{new Date(post.createdAt).toLocaleDateString()}</span>
                             </div>
                             <div className="post-list__actions">
