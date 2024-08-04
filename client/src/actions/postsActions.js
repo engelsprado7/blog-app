@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { isTokenExpired } from './../utils/isTokenExpired'; // Adjust the path accordingly
+
 const apiUrl = process.env.REACT_APP_URL_SERVER || 'https://localhost:5000';
 // const apiUrl = 'http://localhost:5000';
 
@@ -28,9 +30,20 @@ const deletePostSuccess = (id) => ({ type: DELETE_POST_SUCCESS, payload: id });
 // Thunk Actions
 
 const getToken = () => localStorage.getItem('jwtToken');
+
+// Redirect to login if token is expired
+const redirectToLogin = () => {
+    window.location.href = '/login';
+};
+
 export const fetchPosts = (page = 1, limit = 3) => async (dispatch) => {
     dispatch(fetchPostsRequest());
     const token = getToken();
+
+    if (isTokenExpired(token)) {
+        redirectToLogin();
+        return;
+    }
     try {
         const response = await axios.get(`${apiUrl}/api/posts`, {
             params: { page, limit },
@@ -46,7 +59,10 @@ export const fetchPosts = (page = 1, limit = 3) => async (dispatch) => {
 export const addPost = (post) => async (dispatch) => {
     try {
         const token = getToken();
-
+        if (isTokenExpired(token)) {
+            redirectToLogin();
+            return;
+        }
         const response = await axios.post(`${apiUrl}/api/posts`, post, {
             headers: { Authorization: `Bearer ${token}` },
             withCredentials: true,
@@ -70,6 +86,10 @@ export const addPost = (post) => async (dispatch) => {
 export const editPost = (id, postData) => async (dispatch) => {
     dispatch(editPostRequest());
     const token = getToken();
+    if (isTokenExpired(token)) {
+        redirectToLogin();
+        return;
+    }
     try {
         const response = await axios.put(`${apiUrl}/api/posts/${id}`, postData, {
             headers: { Authorization: `Bearer ${token}` },
@@ -87,7 +107,10 @@ export const deletePost = (id) => {
     return async (dispatch) => {
         try {
             const token = getToken();
-
+            if (isTokenExpired(token)) {
+                redirectToLogin();
+                return;
+            }
             await axios.delete(`${apiUrl}/api/posts/${id}`, {
                 headers: { Authorization: `Bearer ${token}` },
                 withCredentials: true,
