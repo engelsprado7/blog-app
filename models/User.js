@@ -1,11 +1,15 @@
 const mongoose = require('mongoose');
-const passportLocalMongoose = require('passport-local-mongoose');
+const jwt = require('jsonwebtoken');
 
 const UserSchema = new mongoose.Schema({
-    username: String,
-    password: String
+    username: { type: String, required: true },
+    password: { type: String, required: true },
+    createdAt: { type: Date, default: Date.now }
 });
 
-UserSchema.plugin(passportLocalMongoose);
+UserSchema.methods.generateJWT = function () {
+    const payload = { id: this._id, username: this.username };
+    return jwt.sign(payload, 'test', { expiresIn: '1h' });
+};
 
 module.exports = mongoose.model('User', UserSchema);
