@@ -74,6 +74,18 @@
       }
     }
   }
+  .post-list__metadata {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9em;
+    color: #555;
+    margin-top: 5px;
+  }
+
+  .post-list__author,
+  .post-list__date {
+    margin-right: 10px;
+  }
 
   .pagination {
     display: flex;

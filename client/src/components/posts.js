@@ -79,6 +79,10 @@ class PostList extends Component {
                         <li key={post._id} className="post-list__item">
                             <h3 className="post-list__title">{post.title}</h3>
                             <p className="post-list__content">{post.content}</p>
+                            <div className="post-list__metadata">
+                                <span className="post-list__author">By: {post.author.username}</span>
+                                <span className="post-list__date">{new Date(post.createdAt).toLocaleDateString()}</span>
+                            </div>
                             <div className="post-list__actions">
                                 <button className="post-list__button post-list__button--edit" onClick={() => this.startEditing(post)}>Edit</button>
                                 <button className="post-list__button post-list__button--delete" onClick={() => this.handleDelete(post._id)}>Delete</button>
