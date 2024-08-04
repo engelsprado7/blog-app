@@ -15,14 +15,16 @@ class Login extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        this.props.loginUser(this.state).then(this.props.history.push('/')).catch((err) => {
+        this.props.loginUser(this.state).then(() => {
+            this.props.history.push('/'); // Redirect to home on success
+        }).catch((err) => {
             this.setState({ error: err.message });
         });
     };
 
     render() {
-        const { username, password, error } = this.state;
-
+        const { username, password } = this.state;
+        const { error } = this.props
         return (
             <div className="login-container">
                 <h2>Login</h2>
@@ -55,4 +57,7 @@ const mapDispatchToProps = {
     loginUser
 };
 
-export default connect(null, mapDispatchToProps)(Login);
+const mapStateToProps = (state) => ({
+    error: state.auth.error,
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

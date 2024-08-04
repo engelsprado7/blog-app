@@ -5,10 +5,13 @@ const passport = require('passport');
 const cors = require('cors');
 const session = require('express-session');
 const app = express();
+require('dotenv').config();
 
 //Since we are running different port for client side and server side code
 //Such as localhost 3000 for client side and localhost 5000 for the server
 //Cors can help us to avoid the cors policy 'https://blog-app-client-nxlr.onrender.com',
+// Load environment variables
+
 app.use(
     cors({
         origin: process.env.CLIENT_ORIGIN,

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { fetchPosts, deletePost } from '../actions/postsActions';
 import EditPostForm from './editPost';
 import Modal from '../ui/Modal';
+import Loading from './Loading';
 
 class PostList extends Component {
     state = {
@@ -56,7 +57,7 @@ class PostList extends Component {
         }
 
         if (loading) {
-            return <p>Loading...</p>;
+            return <Loading />
         }
 
         if (error) {
