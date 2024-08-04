@@ -4,6 +4,14 @@
 
 The Blog App is a web application that allows users to create, read, update, and delete blog posts. It features user authentication, pagination, and a modern UI similar to Twitter. The application is built with a React frontend and an Express backend, using MongoDB for data storage. It also incorporates Redux for state management and supports user login and registration.
 
+![image](https://github.com/user-attachments/assets/1d542b6d-26e1-4b75-b7ce-e148a961a9cc)
+
+![image](https://github.com/user-attachments/assets/4fd1075d-29e8-44a3-a0fe-5b7c8f33fcbb)
+
+![image](https://github.com/user-attachments/assets/37824ba2-b3b2-49a7-a501-a73dca94ea73)
+
+![image](https://github.com/user-attachments/assets/35d08772-7466-49b5-91a6-3b5cf1077f5c)
+
 ## Features
 
 - User authentication and authorization
