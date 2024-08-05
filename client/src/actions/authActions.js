@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { jwtDecode } from "jwt-decode";
+
 // const apiUrl = 'http://localhost:5000';
 const apiUrl = process.env.REACT_APP_URL_SERVER || 'https://localhost:5000'
 
@@ -12,6 +13,7 @@ export const loginUser = (userData) => async (dispatch) => {
         setAuthToken(token);
         dispatch(setCurrentUser(decoded));
     } catch (err) {
+        dispatch({ type: 'AUTH_ERROR', payload: 'Invalid credentials' });
         console.error('Error logging in');
     }
 };
@@ -23,7 +25,7 @@ export const registerUser = (userData) => async (dispatch) => {
         localStorage.setItem('jwtToken', token);
         const decoded = jwtDecode(token);
         setAuthToken(token);
-        dispatch(setCurrentUser(decoded));
+        dispatch(setCurrentUser({ decoded }));
     } catch (err) {
         console.error('Error registering');
     }
@@ -33,7 +35,7 @@ export const registerUser = (userData) => async (dispatch) => {
 export const setCurrentUser = (decoded) => {
     return {
         type: 'SET_CURRENT_USER',
-        payload: decoded
+        payload: { decoded }
     };
 };
 
